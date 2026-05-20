@@ -907,13 +907,23 @@ async function askAI(mode) {
   const systemPrompt = sysFn(level, input);
 
   try {
-    const GEMINI_KEY = 'AIzaSyA6T8wjAW0ufr8NcVO51rCJ2FOTP2g3cc0';
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`, {
+    const OPENROUTER_KEY = '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
+
+';
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENROUTER_KEY}`,
+        'HTTP-Referer': window.location.href,
+        'X-Title': 'LinguaAI'
+      },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ parts: [{ text: input }] }]
+        model: 'meta-llama/llama-3.2-3b-instruct:free',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: input }
+        ]
       })
     });
 
@@ -923,7 +933,7 @@ async function askAI(mode) {
     }
 
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || (lang === 'bn' ? 'কোনো উত্তর পাওয়া যায়নি।' : 'No response received.');
+    const text = data.choices?.[0]?.message?.content || (lang === 'bn' ? 'কোনো উত্তর পাওয়া যায়নি।' : 'No response received.');
 
     sessions++;
     topics++;

@@ -907,7 +907,7 @@ async function askAI(mode) {
   const systemPrompt = sysFn(level, input);
 
   try {
-    const GEMINI_KEY = 'AIzaSyAgJD3YTbezuNViVUI-tssCXIDACSrIjas';
+    const GEMINI_KEY = 'AIzaSyA6T8wjAW0ufr8NcVO51rCJ2FOTP2g3cc0';
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
